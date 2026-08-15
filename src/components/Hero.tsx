@@ -4,11 +4,12 @@ import { ChevronDown } from 'lucide-react';
 import IslamicPattern from './IslamicPattern';
 import ShootingStars from './ShootingStars';
 
-const backgroundImages = [
-  "/photo/WhatsApp Image 2026-08-14 at 4.57.22 PM.jpeg",
-  "/photo/WhatsApp Image 2026-08-14 at 4.57.23 PM (1).jpeg",
-  "/photo/WhatsApp Image 2026-08-14 at 4.57.23 PM.jpeg"
-];
+// Explicitly import images so Vite guarantees they are bundled and paths are correct
+import hero1 from '../../public/photo/hero1.jpeg';
+import hero2 from '../../public/photo/hero2.jpeg';
+import hero3 from '../../public/photo/hero3.jpeg';
+
+const backgroundImages = [hero1, hero2, hero3];
 
 const Hero: React.FC = () => {
   const [currentBg, setCurrentBg] = useState(0);
@@ -24,19 +25,19 @@ const Hero: React.FC = () => {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 md:pt-20">
       {/* Background Slideshow Layer */}
       <div className="absolute inset-0 z-0 bg-midnight">
-        <AnimatePresence mode="popLayout">
+        <AnimatePresence>
           <motion.img
             key={currentBg}
             src={backgroundImages[currentBg]}
-            initial={{ opacity: 0, scale: 1.05 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 2, ease: "easeInOut" }}
+            transition={{ duration: 1.5, ease: "easeInOut" }}
             className="absolute inset-0 w-full h-full object-cover"
           />
         </AnimatePresence>
-        {/* Lighter overlay to ensure text readability while keeping images highly visible */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-midnight/50 to-midnight/90"></div>
+        {/* Very light overlay just to keep text readable */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-midnight"></div>
       </div>
 
       <ShootingStars />
