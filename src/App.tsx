@@ -17,6 +17,7 @@ import FinalAppeal from './components/FinalAppeal';
 import Footer from './components/Footer';
 import StarField from './components/StarField';
 import Gallery from './components/Gallery';
+import VideoSection from './components/VideoSection';
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -49,6 +50,7 @@ function App() {
         <ImpactStats />
         <Humanitarian />
         <Gallery />
+        <VideoSection />
         <Education />
         <KarbalaSection />
         <Brotherhood />

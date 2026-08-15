@@ -2,35 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 
-const images = [
-  "WhatsApp Image 2026-08-14 at 11.32.29 AM (1).jpeg",
-  "WhatsApp Image 2026-08-14 at 11.32.29 AM.jpeg",
-  "WhatsApp Image 2026-08-14 at 11.32.30 AM (1).jpeg",
-  "WhatsApp Image 2026-08-14 at 11.32.30 AM.jpeg",
-  "WhatsApp Image 2026-08-14 at 11.32.31 AM.jpeg",
-  "WhatsApp Image 2026-08-14 at 11.32.32 AM (1).jpeg",
-  "WhatsApp Image 2026-08-14 at 11.32.32 AM.jpeg",
-  "WhatsApp Image 2026-08-14 at 11.34.46 AM.jpeg",
-  "WhatsApp Image 2026-08-14 at 11.34.47 AM.jpeg",
-  "WhatsApp Image 2026-08-14 at 11.34.48 AM.jpeg",
-  "WhatsApp Image 2026-08-14 at 11.34.49 AM.jpeg",
-  "WhatsApp Image 2026-08-14 at 11.34.52 AM.jpeg",
-  "WhatsApp Image 2026-08-14 at 11.40.25 AM.jpeg",
-  "WhatsApp Image 2026-08-14 at 11.40.38 AM.jpeg",
-  "WhatsApp Image 2026-08-14 at 11.40.44 AM (1).jpeg",
-  "WhatsApp Image 2026-08-14 at 11.40.44 AM (2).jpeg",
-  "WhatsApp Image 2026-08-14 at 11.40.44 AM.jpeg",
-  "WhatsApp Image 2026-08-14 at 11.40.45 AM (1).jpeg",
-  "WhatsApp Image 2026-08-14 at 11.40.45 AM.jpeg",
-  "WhatsApp Image 2026-08-14 at 11.40.46 AM.jpeg",
-  "WhatsApp Image 2026-08-14 at 11.40.47 AM (1).jpeg",
-  "WhatsApp Image 2026-08-14 at 11.40.47 AM (2).jpeg",
-  "WhatsApp Image 2026-08-14 at 11.40.47 AM.jpeg",
-  "WhatsApp Image 2026-08-14 at 11.40.48 AM (1).jpeg",
-  "../photo/WhatsApp Image 2026-08-14 at 4.57.22 PM.jpeg",
-  "../photo/WhatsApp Image 2026-08-14 at 4.57.23 PM (1).jpeg",
-  "../photo/WhatsApp Image 2026-08-14 at 4.57.23 PM.jpeg"
-];
+const images = Array.from({ length: 50 }, (_, i) => `img${i + 1}.jpeg`);
 
 const Gallery: React.FC = () => {
   const [selectedImg, setSelectedImg] = useState<string | null>(null);
