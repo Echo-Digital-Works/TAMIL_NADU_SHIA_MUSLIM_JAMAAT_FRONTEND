@@ -2,7 +2,7 @@ export const activities = [
   {
     id: 1,
     title: "Democratic Duty",
-    description: "FIR process awareness camps organized in Royapettah and Perambur to create awareness and safeguard voting rights.",
+    description: "SIR process awareness camps organized in Royapettah and Perambur to create awareness and safeguard voting rights.",
     stat: "Voting Awareness",
     icon: "vote"
   },
@@ -15,14 +15,14 @@ export const activities = [
   },
   {
     id: 3,
-    title: "Mawlid — 13th Rajab",
+    title: "Mawlood — 13th Rajab",
     description: "Biryani distributed to 1,000 needy people near Amru Nisha Begum Masjid on the birth anniversary of Imam Ali (AS).",
     stat: "1,000 Meals",
     icon: "utensils"
   },
   {
     id: 4,
-    title: "Mawlid — 3rd Shaban",
+    title: "Mawlood — 3rd Shaban",
     description: "Water and juice distributed to 2,000 people on the birth anniversary of Imam Hussain (AS).",
     stat: "2,000 People Served",
     icon: "droplet"
