@@ -1,16 +1,58 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import IslamicPattern from './IslamicPattern';
 import ShootingStars from './ShootingStars';
-import MosqueSilhouette from './MosqueSilhouette';
+
+const backgroundImages = [
+  '/hero/hero-1.png',
+  '/hero/hero-2.png'
+];
+
+const mobileBackgroundImages = [
+  '/hero/hero-1-mobile.png',
+  '/hero/hero-2-mobile.png'
+];
 
 const Hero: React.FC = () => {
+  const [currentBg, setCurrentBg] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentBg((prev) => (prev + 1) % backgroundImages.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 md:pt-20 bg-midnight">
+      {/* Background Slideshow Layer */}
+      <div className="absolute inset-0 z-0 bg-midnight">
+        <AnimatePresence>
+          <motion.img
+            key={currentBg + (isMobile ? '-mobile' : '-desktop')}
+            src={isMobile ? mobileBackgroundImages[currentBg] : backgroundImages[currentBg]}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.5, ease: "easeInOut" }}
+            className="absolute inset-0 w-full h-full object-cover object-top opacity-40"
+          />
+        </AnimatePresence>
+        {/* Gradient overlay to ensure text readability and blend with the dark theme */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-midnight"></div>
+      </div>
+
       <ShootingStars />
       <IslamicPattern opacity={0.03} />
-      <MosqueSilhouette />
       
       <div className="relative z-10 container mx-auto px-4 sm:px-6 text-center mt-12 md:mt-0">
         <motion.div
