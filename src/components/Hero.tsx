@@ -1,47 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import IslamicPattern from './IslamicPattern';
 import ShootingStars from './ShootingStars';
-
-// Explicitly import images so Vite guarantees they are bundled and paths are correct
-import hero1 from '../../public/photo/hero1.jpeg';
-import hero2 from '../../public/photo/hero2.jpeg';
-import hero3 from '../../public/photo/hero3.jpeg';
-
-const backgroundImages = [hero1, hero2, hero3];
+import MosqueSilhouette from './MosqueSilhouette';
 
 const Hero: React.FC = () => {
-  const [currentBg, setCurrentBg] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentBg((prev) => (prev + 1) % backgroundImages.length);
-    }, 5000); // Change image every 5 seconds
-    return () => clearInterval(timer);
-  }, []);
-
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 md:pt-20">
-      {/* Background Slideshow Layer */}
-      <div className="absolute inset-0 z-0 bg-midnight">
-        <AnimatePresence>
-          <motion.img
-            key={currentBg}
-            src={backgroundImages[currentBg]}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.5, ease: "easeInOut" }}
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-        </AnimatePresence>
-        {/* Very light overlay just to keep text readable */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-midnight"></div>
-      </div>
-
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 md:pt-20 bg-midnight">
       <ShootingStars />
       <IslamicPattern opacity={0.03} />
+      <MosqueSilhouette />
       
       <div className="relative z-10 container mx-auto px-4 sm:px-6 text-center mt-12 md:mt-0">
         <motion.div
