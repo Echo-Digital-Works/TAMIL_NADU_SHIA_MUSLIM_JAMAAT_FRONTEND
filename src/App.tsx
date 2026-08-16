@@ -6,6 +6,7 @@ import Hero from './components/Hero';
 import QuoteSection from './components/QuoteSection';
 import About from './components/About';
 import Mission from './components/Mission';
+import Founders from './components/Founders';
 import Timeline from './components/Timeline';
 import ImpactStats from './components/ImpactStats';
 import Humanitarian from './components/Humanitarian';
@@ -32,7 +33,7 @@ function App() {
   }, [showSplash]);
 
   return (
-    <div className="min-h-screen text-ivory selection:bg-gold/30 selection:text-gold relative">
+    <div className="min-h-screen text-ivory selection:bg-gold/30 selection:text-gold relative overflow-x-hidden">
       <StarField />
       
       <AnimatePresence>
@@ -46,6 +47,7 @@ function App() {
         <QuoteSection />
         <About />
         <Mission />
+        <Founders />
         <Timeline />
         <ImpactStats />
         <Humanitarian />
