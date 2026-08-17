@@ -18,6 +18,7 @@ import FinalAppeal from './components/FinalAppeal';
 import Footer from './components/Footer';
 import StarField from './components/StarField';
 import Gallery from './components/Gallery';
+import MosqueGallery from './components/MosqueGallery';
 import VideoSection from './components/VideoSection';
 
 function App() {
@@ -52,6 +53,7 @@ function App() {
         <ImpactStats />
         <Humanitarian />
         <Gallery />
+        <MosqueGallery />
         <VideoSection />
         <Education />
         <KarbalaSection />
