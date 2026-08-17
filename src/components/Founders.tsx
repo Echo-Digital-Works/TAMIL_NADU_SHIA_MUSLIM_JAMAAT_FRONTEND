@@ -6,19 +6,19 @@ const founders = [
     id: 1,
     name: "M. Mohammed Akil",
     role: "President",
-    image: "/founder/founder-1.jpeg"
+    image: "/founder/founder-1.jpeg?v=2"
   },
   {
     id: 2,
     name: "Hyder",
     role: "Secretary",
-    image: "/founder/founder-2.jpeg"
+    image: "/founder/founder-2.jpeg?v=2"
   },
   {
     id: 3,
     name: "Syed Hasan Mohammed",
     role: "Treasurer",
-    image: "/founder/founder-3.jpeg"
+    image: "/founder/founder-3.jpeg?v=2"
   }
 ];
 
