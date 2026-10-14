@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSiteData } from '../context/SiteDataContext';
 
-const objectives = [
+const defaultObjectives = [
   { title: "Unity", desc: "To unite all Muslims without any division, fostering a resilient and inseparable brotherhood across all communities." },
   { title: "Religious Harmony", desc: "To maintain and promote religious harmony in society, building bridges of understanding and mutual respect." },
   { title: "Respect for Law", desc: "To respect and abide by the laws of the Central and State Governments, serving as exemplary and responsible citizens." },
@@ -17,21 +18,27 @@ const objectives = [
 ];
 
 const Mission: React.FC = () => {
+  const { objectives: siteObjectives } = useSiteData();
+  const objectives = (siteObjectives && siteObjectives.length > 0) ? siteObjectives : defaultObjectives;
+
   const [activeIndex, setActiveIndex] = useState(0);
   const [timerKey, setTimerKey] = useState(0); // Used to force progress bar reset
 
   // Auto-play feature
   useEffect(() => {
+    if (objectives.length === 0) return;
     const timer = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % objectives.length);
     }, 4000);
     return () => clearInterval(timer);
-  }, [timerKey]);
+  }, [timerKey, objectives.length]);
 
   const handleManualSelect = (index: number) => {
     setActiveIndex(index);
     setTimerKey(prev => prev + 1); // Reset the timer when manually clicked
   };
+
+  const currentItem = objectives[activeIndex] || objectives[0] || { title: '', desc: '' };
 
   return (
     <section id="mission" className="py-16 md:py-24 relative overflow-hidden">
@@ -75,8 +82,8 @@ const Mission: React.FC = () => {
             <motion.div 
               className="absolute left-[-1px] w-[4px] bg-gold rounded-full shadow-[0_0_10px_rgba(212,175,98,0.8)]"
               animate={{ 
-                top: `${(activeIndex * 100) / objectives.length}%`, 
-                height: `${100 / objectives.length}%` 
+                top: `${(activeIndex * 100) / (objectives.length || 1)}%`, 
+                height: `${100 / (objectives.length || 1)}%` 
               }}
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             />
@@ -100,12 +107,12 @@ const Mission: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* Right: Rich Display Container */}
+          {/* Right: Detailed View Box */}
           <motion.div 
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="w-full lg:w-2/3 relative h-[280px] md:h-[320px] bg-gradient-to-br from-navy/60 to-midnight border border-gold/20 rounded-2xl overflow-hidden backdrop-blur-md shadow-[0_0_50px_rgba(212,175,98,0.1)] group"
+            className="w-full lg:w-2/3 min-h-[380px] bg-gradient-to-br from-navy/40 to-midnight/80 border border-gold/30 rounded-3xl p-8 md:p-12 relative flex flex-col justify-center backdrop-blur-xl shadow-[0_0_50px_rgba(212,175,98,0.05)] overflow-hidden"
           >
             {/* Decorative Corner Flairs */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-gold/10 blur-3xl rounded-full"></div>
@@ -126,13 +133,13 @@ const Mission: React.FC = () => {
                 </div>
                 
                 <h4 className="font-serif text-2xl md:text-3xl text-gold mb-4 relative z-10 drop-shadow-sm leading-tight">
-                  {objectives[activeIndex].title}
+                  {currentItem.title}
                 </h4>
                 
                 <div className="w-12 md:w-16 h-px bg-gold/50 mb-4 md:mb-6 relative z-10"></div>
                 
                 <p className="text-lg md:text-xl text-ivory/90 font-normal leading-relaxed max-w-xl relative z-10 pr-12">
-                  {objectives[activeIndex].desc}
+                  {currentItem.desc}
                 </p>
               </motion.div>
             </AnimatePresence>

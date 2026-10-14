@@ -1,7 +1,28 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useSiteData } from '../context/SiteDataContext';
 
 const KarbalaSection: React.FC = () => {
+  const { content } = useSiteData();
+  const k = content.karbala;
+
+  const defaultCards = [
+    {
+      title: 'Muharram Campaign',
+      desc: 'Digital banners displayed across central locations in Chennai commemorating the timeless sacrifice of Karbala and Imam Hussain (AS).'
+    },
+    {
+      title: 'Awareness Literature',
+      desc: '5,000 copies of the profound booklet "Karbala — A History of Sacrifice" were successfully distributed across more than 10 mosques.'
+    },
+    {
+      title: '10-Day Sabeel',
+      desc: 'Honoring the thirst of the martyrs, juice, buttermilk, and cold water were continuously distributed to the public on Peters Road during the first 10 days of Muharram.'
+    }
+  ];
+
+  const cards = (k?.cards && k.cards.length > 0) ? k.cards : defaultCards;
+
   return (
     <section className="py-16 md:py-24 relative border-t border-red-900/20">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-red-950/10 via-midnight/40 to-transparent pointer-events-none"></div>
@@ -20,7 +41,7 @@ const KarbalaSection: React.FC = () => {
             </svg>
           </div>
           <h2 className="text-sm text-red-500/80 font-semibold tracking-widest uppercase">
-            A Legacy of Sacrifice
+            {k?.badge || 'A Legacy of Sacrifice'}
           </h2>
         </motion.div>
 
@@ -31,50 +52,27 @@ const KarbalaSection: React.FC = () => {
           transition={{ delay: 0.1 }}
           className="font-serif text-5xl md:text-7xl text-ivory font-bold mb-12"
         >
-          Karbala
+          {k?.title || 'Karbala'}
         </motion.h3>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="luxury-card p-8 border-t-2 border-red-900/40 text-left group hover:border-red-600/50 hover:shadow-[0_0_30px_rgba(153,27,27,0.2)]"
-          >
-            <h4 className="font-serif text-3xl text-gold mb-4 group-hover:text-red-400 transition-colors">Muharram Campaign</h4>
-            <p className="text-muted font-light leading-relaxed group-hover:text-ivory transition-colors">
-              Digital banners displayed across central locations in Chennai commemorating the timeless sacrifice of Karbala and Imam Hussain (AS).
-            </p>
-          </motion.div>
-
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-            className="luxury-card p-8 border-t-2 border-red-900/40 text-left group hover:border-red-600/50 hover:shadow-[0_0_30px_rgba(153,27,27,0.2)]"
-          >
-            <h4 className="font-serif text-3xl text-gold mb-4 group-hover:text-red-400 transition-colors">Awareness Literature</h4>
-            <p className="text-muted font-light leading-relaxed group-hover:text-ivory transition-colors">
-              5,000 copies of the profound booklet "Karbala — A History of Sacrifice" were successfully distributed across more than 10 mosques.
-            </p>
-          </motion.div>
-
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.4 }}
-            className="luxury-card p-8 border-t-2 border-red-900/40 text-left group hover:border-red-600/50 hover:shadow-[0_0_30px_rgba(153,27,27,0.2)]"
-          >
-            <h4 className="font-serif text-3xl text-gold mb-4 group-hover:text-red-400 transition-colors">10-Day Sabeel</h4>
-            <p className="text-muted font-light leading-relaxed group-hover:text-ivory transition-colors">
-              Honoring the thirst of the martyrs, juice, buttermilk, and cold water were continuously distributed to the public on Peters Road during the first 10 days of Muharram.
-            </p>
-          </motion.div>
-
+          {cards.map((card, index) => (
+            <motion.div 
+              key={index}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 + index * 0.1 }}
+              className="luxury-card p-8 border-t-2 border-red-900/40 text-left group hover:border-red-600/50 hover:shadow-[0_0_30px_rgba(153,27,27,0.2)]"
+            >
+              <h4 className="font-serif text-3xl text-gold mb-4 group-hover:text-red-400 transition-colors">
+                {card.title}
+              </h4>
+              <p className="text-muted font-light leading-relaxed group-hover:text-ivory transition-colors">
+                {card.desc}
+              </p>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>

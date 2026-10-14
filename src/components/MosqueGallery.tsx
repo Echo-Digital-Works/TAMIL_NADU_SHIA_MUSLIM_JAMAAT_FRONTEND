@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
+import { useSiteData } from '../context/SiteDataContext';
 
-const mosqueImages = [
+const defaultMosqueImages = [
   'img41.jpeg', 'img42.jpeg', 'img43.jpeg', 'img44.jpeg', 'img45.jpeg',
   'img46.jpeg', 'img47.jpeg', 'img48.jpeg', 'img49.jpeg', 'img50.jpeg'
 ];
 
 const MosqueGallery: React.FC = () => {
+  const { images: siteImages, getImageUrl } = useSiteData();
+  const rawImages = (siteImages?.mosqueGallery && siteImages.mosqueGallery.length > 0)
+    ? siteImages.mosqueGallery
+    : defaultMosqueImages.map(img => `/mosque/${img}`);
+
   const [selectedImg, setSelectedImg] = useState<string | null>(null);
 
   return (
@@ -47,29 +53,41 @@ const MosqueGallery: React.FC = () => {
 
         {/* Masonry Grid */}
         <div className="columns-1 sm:columns-2 md:columns-3 gap-6 space-y-6 max-w-6xl mx-auto">
-          {mosqueImages.map((img, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "50px" }}
-              transition={{ delay: (index % 3) * 0.1, duration: 0.5 }}
-              className="break-inside-avoid relative group cursor-pointer rounded-2xl overflow-hidden border border-gold/20 shadow-lg bg-navy/30"
-              onClick={() => setSelectedImg(img)}
-            >
-              <img 
-                src={`/mosque/${img}`} 
-                alt={`Mosque image ${index + 1}`} 
-                loading="lazy"
-                className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700 ease-in-out"
-              />
-              <div className="absolute inset-0 bg-midnight/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                <span className="px-6 py-2 border border-gold text-gold font-semibold rounded-full text-sm translate-y-4 group-hover:translate-y-0 transition-all duration-300 bg-midnight/40 backdrop-blur-sm">
-                  View Image
-                </span>
-              </div>
-            </motion.div>
-          ))}
+          {rawImages.map((img, index) => {
+            const urlStr = typeof img === 'string' ? img : ((img as any)?.url || '');
+            const resolvedSrc = getImageUrl(
+              urlStr.startsWith('/mosque/') || urlStr.startsWith('http') || urlStr.startsWith('/uploads') || urlStr.startsWith('/images')
+                ? urlStr
+                : `/mosque/${urlStr}`
+            );
+            const mosqueTitle = typeof img === 'object' && (img as any)?.title ? (img as any).title : `Mosque #${index + 1}`;
+            const mosqueLoc = typeof img === 'object' && (img as any)?.location ? (img as any).location : '';
+            return (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "50px" }}
+                transition={{ delay: (index % 3) * 0.1, duration: 0.5 }}
+                className="break-inside-avoid relative group cursor-pointer rounded-2xl overflow-hidden border border-gold/20 shadow-lg bg-navy/30"
+                onClick={() => setSelectedImg(resolvedSrc)}
+              >
+                <img 
+                  src={resolvedSrc} 
+                  alt={mosqueTitle} 
+                  loading="lazy"
+                  className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700 ease-in-out"
+                />
+                <div className="absolute inset-0 bg-midnight/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4 text-center">
+                  <h4 className="font-serif text-ivory font-bold text-base mb-1 drop-shadow">{mosqueTitle}</h4>
+                  {mosqueLoc && <p className="text-gold text-xs font-light mb-3">{mosqueLoc}</p>}
+                  <span className="px-5 py-1.5 border border-gold text-gold font-semibold rounded-full text-xs bg-midnight/50 backdrop-blur-sm">
+                    View Image
+                  </span>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
 
       </div>
@@ -94,7 +112,7 @@ const MosqueGallery: React.FC = () => {
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
-              src={`/mosque/${selectedImg}`} 
+              src={selectedImg} 
               alt="Expanded view" 
               className="max-w-full max-h-full object-contain rounded-lg shadow-[0_0_50px_rgba(212,175,98,0.15)] border border-gold/30"
               onClick={(e) => e.stopPropagation()}

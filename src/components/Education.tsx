@@ -1,8 +1,24 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Award, BookOpen } from 'lucide-react';
+import { useSiteData } from '../context/SiteDataContext';
 
 const Education: React.FC = () => {
+  const { content } = useSiteData();
+  const edu = content.education;
+
+  const card1 = edu?.cards?.[0] || {
+    value: '200',
+    title: 'Students Supported',
+    desc: 'Provided essential school bags and notebooks to ensure students have the tools they need to succeed.'
+  };
+
+  const card2 = edu?.cards?.[1] || {
+    value: '150',
+    title: 'Academic Achievers',
+    desc: 'Awarded special prizes and ₹2,000 incentives each to students passing 10th and 12th grades with high marks.'
+  };
+
   return (
     <section className="py-16 md:py-24 relative">
       <div className="container mx-auto px-6 lg:px-12">
@@ -14,7 +30,7 @@ const Education: React.FC = () => {
             className="text-sm text-gold font-semibold tracking-widest uppercase mb-4 flex items-center justify-center gap-4"
           >
             <div className="w-8 h-px bg-gold/50"></div>
-            Empowering the Future
+            {edu?.badge || 'Empowering the Future'}
             <div className="w-8 h-px bg-gold/50"></div>
           </motion.h2>
           <motion.h3 
@@ -24,7 +40,7 @@ const Education: React.FC = () => {
             transition={{ delay: 0.1 }}
             className="font-serif text-4xl md:text-5xl text-ivory font-bold mb-6"
           >
-            Educational Support & Encouragement
+            {edu?.title || 'Educational Support & Encouragement'}
           </motion.h3>
           <motion.p 
             initial={{ opacity: 0 }}
@@ -33,7 +49,7 @@ const Education: React.FC = () => {
             transition={{ delay: 0.2 }}
             className="text-muted font-light text-lg"
           >
-            We believe that education is the foundation of a strong and just society. During our first year, we prioritized supporting students in their academic journeys.
+            {edu?.description || 'We believe that education is the foundation of a strong and just society. During our first year, we prioritized supporting students in their academic journeys.'}
           </motion.p>
         </div>
 
@@ -51,9 +67,15 @@ const Education: React.FC = () => {
             <div className="w-20 h-20 rounded-full bg-gold/10 flex items-center justify-center mb-6 border border-gold/40 group-hover:bg-gold/30 group-hover:scale-110 transition-all duration-500 shadow-[0_0_15px_rgba(212,175,98,0.1)] group-hover:shadow-[0_0_25px_rgba(212,175,98,0.3)]">
               <BookOpen size={32} className="text-gold" />
             </div>
-            <h4 className="font-serif text-5xl text-gold mb-2 group-hover:text-champagne transition-colors drop-shadow-[0_0_10px_rgba(212,175,98,0.2)]">200</h4>
-            <h5 className="text-lg text-ivory font-medium mb-4 uppercase tracking-widest">Students Supported</h5>
-            <p className="text-muted font-light leading-relaxed group-hover:text-ivory/90 transition-colors">Provided essential school bags and notebooks to ensure students have the tools they need to succeed.</p>
+            <h4 className="font-serif text-5xl text-gold mb-2 group-hover:text-champagne transition-colors drop-shadow-[0_0_10px_rgba(212,175,98,0.2)]">
+              {card1.value}
+            </h4>
+            <h5 className="text-lg text-ivory font-medium mb-4 uppercase tracking-widest">
+              {card1.title}
+            </h5>
+            <p className="text-muted font-light leading-relaxed group-hover:text-ivory/90 transition-colors">
+              {card1.desc}
+            </p>
           </motion.div>
 
           <motion.div 
@@ -69,9 +91,15 @@ const Education: React.FC = () => {
             <div className="w-20 h-20 rounded-full bg-gold/10 flex items-center justify-center mb-6 border border-gold/40 group-hover:bg-gold/30 group-hover:scale-110 transition-all duration-500 shadow-[0_0_15px_rgba(212,175,98,0.1)] group-hover:shadow-[0_0_25px_rgba(212,175,98,0.3)]">
               <Award size={32} className="text-gold" />
             </div>
-            <h4 className="font-serif text-5xl text-gold mb-2 group-hover:text-champagne transition-colors drop-shadow-[0_0_10px_rgba(212,175,98,0.2)]">150</h4>
-            <h5 className="text-lg text-ivory font-medium mb-4 uppercase tracking-widest">Academic Achievers</h5>
-            <p className="text-muted font-light leading-relaxed group-hover:text-ivory/90 transition-colors">Awarded special prizes and ₹2,000 incentives each to students passing 10th and 12th grades with high marks.</p>
+            <h4 className="font-serif text-5xl text-gold mb-2 group-hover:text-champagne transition-colors drop-shadow-[0_0_10px_rgba(212,175,98,0.2)]">
+              {card2.value}
+            </h4>
+            <h5 className="text-lg text-ivory font-medium mb-4 uppercase tracking-widest">
+              {card2.title}
+            </h5>
+            <p className="text-muted font-light leading-relaxed group-hover:text-ivory/90 transition-colors">
+              {card2.desc}
+            </p>
           </motion.div>
 
         </div>

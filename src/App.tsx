@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
+
+// Existing Public Website Components
 import SplashScreen from './components/SplashScreen';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -21,7 +24,25 @@ import Gallery from './components/Gallery';
 import MosqueGallery from './components/MosqueGallery';
 import VideoSection from './components/VideoSection';
 
-function App() {
+// Providers
+import { SiteDataProvider } from './context/SiteDataContext';
+import { AdminAuthProvider } from './admin/context/AdminAuthContext';
+
+// Admin Components & Pages
+import ProtectedRoute from './admin/components/ProtectedRoute';
+import AdminLayout from './admin/components/AdminLayout';
+import AdminLogin from './admin/pages/AdminLogin';
+import AdminDashboard from './admin/pages/AdminDashboard';
+import ContentManagement from './admin/pages/ContentManagement';
+import ImageManagement from './admin/pages/ImageManagement';
+import StatisticsManagement from './admin/pages/StatisticsManagement';
+import EventManagement from './admin/pages/EventManagement';
+import TracksManagement from './admin/pages/TracksManagement';
+import SponsorsManagement from './admin/pages/SponsorsManagement';
+import AnnouncementsManagement from './admin/pages/AnnouncementsManagement';
+
+// Public Landing Page Component (Preserves all existing UI, styling, and animations)
+function PublicWebsite() {
   const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
@@ -64,6 +85,47 @@ function App() {
 
       <Footer />
     </div>
+  );
+}
+
+function App() {
+  return (
+    <SiteDataProvider>
+      <AdminAuthProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* Public Website Route */}
+            <Route path="/" element={<PublicWebsite />} />
+
+            {/* Admin Authentication Route */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+
+            {/* Admin Panel Protected Routes */}
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<Navigate to="/admin/dashboard" replace />} />
+              <Route path="dashboard" element={<AdminDashboard />} />
+              <Route path="content" element={<ContentManagement />} />
+              <Route path="images" element={<ImageManagement />} />
+              <Route path="statistics" element={<StatisticsManagement />} />
+              <Route path="events" element={<EventManagement />} />
+              <Route path="tracks" element={<TracksManagement />} />
+              <Route path="sponsors" element={<SponsorsManagement />} />
+              <Route path="announcements" element={<AnnouncementsManagement />} />
+            </Route>
+
+            {/* Fallback */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </BrowserRouter>
+      </AdminAuthProvider>
+    </SiteDataProvider>
   );
 }
 

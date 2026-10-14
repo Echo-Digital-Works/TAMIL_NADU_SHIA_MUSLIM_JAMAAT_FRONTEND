@@ -1,8 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { MapPin } from 'lucide-react';
+import { useSiteData } from '../context/SiteDataContext';
 
-const mosqueData = [
+const defaultMosqueData = [
   {
     district: "Chennai District",
     mosques: [
@@ -42,6 +43,9 @@ const mosqueData = [
 ];
 
 const MosqueGuide: React.FC = () => {
+  const { mosqueGuide: siteGuide } = useSiteData();
+  const mosqueData = (siteGuide && siteGuide.length > 0) ? siteGuide : defaultMosqueData;
+
   return (
     <section className="py-16 md:py-24 relative overflow-hidden border-t border-gold/10">
       <div className="container mx-auto px-6 lg:px-12 relative z-10">

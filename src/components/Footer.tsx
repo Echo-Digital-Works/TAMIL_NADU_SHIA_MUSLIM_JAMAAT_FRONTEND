@@ -1,4 +1,6 @@
+import React from 'react';
 import { Phone } from 'lucide-react';
+import { useSiteData } from '../context/SiteDataContext';
 
 const InstagramIcon = ({ size = 24, className = "" }) => (
   <svg 
@@ -20,35 +22,52 @@ const InstagramIcon = ({ size = 24, className = "" }) => (
 );
 
 const Footer: React.FC = () => {
+  const { branding, content, getImageUrl } = useSiteData();
+  const footer = content.footer;
+
   return (
     <footer className="bg-[#03050B] py-16 border-t border-ivory/5 relative z-10">
       <div className="container mx-auto px-6 lg:px-12">
         <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-12">
           
           <div className="text-center md:text-left max-w-sm flex flex-col items-center md:items-start">
-            <div className="bg-white p-1.5 rounded-xl border-2 border-gold/30 shadow-[0_0_20px_rgba(212,175,98,0.2)] mb-4">
+            <div className="bg-white p-1.5 rounded-xl border-2 border-gold/30 shadow-[0_0_20px_rgba(212,175,98,0.2)] mb-4 flex items-center justify-center overflow-hidden">
               <img 
-                src="/logo.jpeg" 
+                src={getImageUrl(branding?.logoUrl || '/logo.jpeg')} 
                 alt="Jamaat Logo" 
                 className="w-16 h-16 object-contain"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (!target.src.endsWith('/logo.jpeg')) {
+                    target.src = '/logo.jpeg';
+                  }
+                }}
               />
             </div>
             <h2 className="font-serif text-2xl font-bold text-gold mb-2">
-              Tamil Nadu Shia Muslim Jamaat
+              {branding?.name || 'Tamil Nadu Shia Muslim Jamaat'}
             </h2>
             <p className="text-muted text-sm tracking-widest uppercase mb-6">
-              Faith • Unity • Justice • Humanity
+              {branding?.tagline || 'Faith • Unity • Justice • Humanity'}
             </p>
             <p className="text-ivory/50 text-xs leading-relaxed mb-6">
-              Dedicated to serving the community through humanitarian aid, educational support, and upholding justice and brotherhood.
+              {footer?.aboutText || 'Dedicated to serving the community through humanitarian aid, educational support, and upholding justice and brotherhood.'}
             </p>
             
             {/* Social Links */}
             <div className="flex items-center gap-4">
-              <a href="https://www.instagram.com/tamil_nadu_shia_muslim_jamaath?igsh=MTBmYnl0NGVvNDhybA==" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-ivory/5 flex items-center justify-center text-ivory/70 hover:bg-gold hover:text-midnight transition-colors">
+              <a 
+                href={branding?.instagramUrl || 'https://www.instagram.com/tamil_nadu_shia_muslim_jamaath?igsh=MTBmYnl0NGVvNDhybA=='} 
+                target="_blank" 
+                rel="noreferrer" 
+                className="w-10 h-10 rounded-full bg-ivory/5 flex items-center justify-center text-ivory/70 hover:bg-gold hover:text-midnight transition-colors"
+              >
                 <InstagramIcon size={18} />
               </a>
-              <a href="tel:+919566016668" className="w-10 h-10 rounded-full bg-ivory/5 flex items-center justify-center text-ivory/70 hover:bg-gold hover:text-midnight transition-colors">
+              <a 
+                href={`tel:${branding?.primaryPhone || '+919566016668'}`} 
+                className="w-10 h-10 rounded-full bg-ivory/5 flex items-center justify-center text-ivory/70 hover:bg-gold hover:text-midnight transition-colors"
+              >
                 <Phone size={18} />
               </a>
             </div>
@@ -69,7 +88,7 @@ const Footer: React.FC = () => {
               <ul className="space-y-3">
                 <li><a href="#impact" className="text-muted hover:text-gold text-sm transition-colors">Impact</a></li>
                 <li><a href="#contact" className="text-muted hover:text-gold text-sm transition-colors">Contact</a></li>
-                <li><a href="https://wa.me/919566016668?text=I%20would%20like%20to%20support%20and%20contribute%20to%20the%20Jamaat" target="_blank" rel="noreferrer" className="text-gold hover:text-champagne text-sm transition-colors font-medium flex items-center gap-2">Support Us</a></li>
+                <li><a href={`https://wa.me/${(branding?.whatsappNumber || '919566016668').replace(/[^0-9]/g, '')}?text=I%20would%20like%20to%20support%20and%20contribute%20to%20the%20Jamaat`} target="_blank" rel="noreferrer" className="text-gold hover:text-champagne text-sm transition-colors font-medium flex items-center gap-2">Support Us</a></li>
               </ul>
             </div>
           </div>
@@ -78,8 +97,8 @@ const Footer: React.FC = () => {
 
         <div className="mt-16 pt-8 border-t border-ivory/10 text-center flex flex-col items-center justify-center">
           <p className="font-serif text-xl text-gold mb-2">Wassalam</p>
-          <p className="text-muted text-sm tracking-wider">Tamil Nadu Shia Muslim Jamaat</p>
-          <p className="text-ivory/30 text-xs mt-6">&copy; {new Date().getFullYear()} Tamil Nadu Shia Muslim Jamaat. All rights reserved.</p>
+          <p className="text-muted text-sm tracking-wider">{branding?.name || 'Tamil Nadu Shia Muslim Jamaat'}</p>
+          <p className="text-ivory/30 text-xs mt-6">{footer?.copyrightText || `© ${new Date().getFullYear()} Tamil Nadu Shia Muslim Jamaat. All rights reserved.`}</p>
           <p className="text-ivory/60 text-xs mt-3 tracking-widest uppercase flex items-center justify-center gap-2">
             Developed by <span className="text-gold font-bold drop-shadow-[0_0_8px_rgba(212,175,98,0.8)]">Echo Digital Works</span>
           </p>

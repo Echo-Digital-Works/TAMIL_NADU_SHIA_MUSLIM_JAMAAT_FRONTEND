@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
+import { useSiteData } from '../context/SiteDataContext';
 
-const images = Array.from({ length: 40 }, (_, i) => `img${i + 1}.jpeg`);
+const defaultImages = Array.from({ length: 40 }, (_, i) => `/images/img${i + 1}.jpeg`);
 
 const Gallery: React.FC = () => {
+  const { images: siteImages, getImageUrl } = useSiteData();
+  const rawImages = (siteImages?.gallery && siteImages.gallery.length > 0) ? siteImages.gallery : defaultImages;
+  const images = rawImages.map(img => typeof img === 'string' ? img : (img as any).url);
+
   const [selectedImg, setSelectedImg] = useState<string | null>(null);
 
   return (
@@ -42,29 +47,32 @@ const Gallery: React.FC = () => {
 
         {/* Masonry Grid */}
         <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
-          {images.map((img, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "50px" }}
-              transition={{ delay: (index % 5) * 0.1, duration: 0.5 }}
-              className="break-inside-avoid relative group cursor-pointer rounded-2xl overflow-hidden border border-gold/10 shadow-lg bg-navy/30"
-              onClick={() => setSelectedImg(img)}
-            >
-              <img 
-                src={`/images/${img}`} 
-                alt={`Social Work ${index + 1}`} 
-                loading="lazy"
-                className="w-full h-auto object-cover transform group-hover:scale-110 transition-transform duration-700 ease-in-out"
-              />
-              <div className="absolute inset-0 bg-midnight/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                <span className="px-4 py-2 bg-gold/90 text-midnight font-semibold rounded-full text-sm translate-y-4 group-hover:translate-y-0 transition-all duration-300">
-                  View Photo
-                </span>
-              </div>
-            </motion.div>
-          ))}
+          {images.map((img, index) => {
+            const resolvedSrc = getImageUrl(img);
+            return (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "50px" }}
+                transition={{ delay: (index % 5) * 0.1, duration: 0.5 }}
+                className="break-inside-avoid relative group cursor-pointer rounded-2xl overflow-hidden border border-gold/10 shadow-lg bg-navy/30"
+                onClick={() => setSelectedImg(resolvedSrc)}
+              >
+                <img 
+                  src={resolvedSrc} 
+                  alt={`Social Work ${index + 1}`} 
+                  loading="lazy"
+                  className="w-full h-auto object-cover transform group-hover:scale-110 transition-transform duration-700 ease-in-out"
+                />
+                <div className="absolute inset-0 bg-midnight/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <span className="px-4 py-2 bg-gold/90 text-midnight font-semibold rounded-full text-sm translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+                    View Photo
+                  </span>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
 
       </div>
@@ -89,7 +97,7 @@ const Gallery: React.FC = () => {
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
-              src={`/images/${selectedImg}`} 
+              src={selectedImg} 
               alt="Expanded view" 
               className="max-w-full max-h-full object-contain rounded-lg shadow-[0_0_50px_rgba(212,175,98,0.1)] border border-gold/20"
               onClick={(e) => e.stopPropagation()}

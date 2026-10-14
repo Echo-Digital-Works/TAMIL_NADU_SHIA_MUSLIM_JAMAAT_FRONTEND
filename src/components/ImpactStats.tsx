@@ -1,8 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { statistics } from '../data/jamaatData';
+import { useSiteData } from '../context/SiteDataContext';
 
 const ImpactStats: React.FC = () => {
+  const { statistics } = useSiteData();
   return (
     <section id="impact" className="py-16 md:py-24 relative border-y border-gold/10">
       <div className="absolute inset-0 bg-hero-gradient opacity-50 pointer-events-none"></div>

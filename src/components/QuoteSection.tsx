@@ -1,8 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { quotes } from '../data/jamaatData';
+import { quotes as defaultQuotes } from '../data/jamaatData';
+import { useSiteData } from '../context/SiteDataContext';
 
 const QuoteSection: React.FC = () => {
+  const { content } = useSiteData();
+  const quranQuote = content.quotes?.quran || defaultQuotes.quran;
   return (
     <section className="py-16 md:py-24 relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/5 via-navy/30 to-transparent pointer-events-none"></div>
@@ -37,12 +40,12 @@ const QuoteSection: React.FC = () => {
           <div className="absolute bottom-4 right-4 w-8 h-8 border-b border-r border-gold/30"></div>
 
           <p className="font-serif text-2xl md:text-4xl text-ivory leading-relaxed mb-6 italic">
-            "{quotes.quran.text}"
+            "{quranQuote.text}"
           </p>
           <div className="flex items-center justify-center gap-4">
             <div className="h-px bg-gold/50 w-12"></div>
             <p className="text-gold font-semibold tracking-wider text-sm">
-              {quotes.quran.source}
+              {quranQuote.source}
             </p>
             <div className="h-px bg-gold/50 w-12"></div>
           </div>

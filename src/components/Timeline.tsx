@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { activities } from '../data/jamaatData';
+import { activities as defaultActivities } from '../data/jamaatData';
+import { useSiteData } from '../context/SiteDataContext';
 import { 
   Vote, Globe, Utensils, Droplet, 
   BookOpen, Users, GraduationCap, 
@@ -16,6 +17,9 @@ const iconMap: Record<string, React.ReactNode> = {
 };
 
 const Timeline: React.FC = () => {
+  const { activities: siteActivities } = useSiteData();
+  const activities = (siteActivities && siteActivities.length > 0) ? siteActivities : defaultActivities;
+
   return (
     <section id="journey" className="py-16 md:py-24 relative overflow-hidden">
       <div className="container mx-auto px-6 lg:px-12 relative z-10">
@@ -58,38 +62,37 @@ const Timeline: React.FC = () => {
                 >
                   
                   {/* Left Side (Empty for odd, Content for even on Desktop) */}
-                  <div className={`hidden md:block w-1/2 pr-12 text-right ${isEven ? 'md:opacity-100' : 'md:opacity-0 pointer-events-none'}`}>
-                    <h4 className="font-serif text-2xl text-gold mb-2">{activity.title}</h4>
-                    <p className="text-muted font-light mb-4">{activity.description}</p>
-                    <span className="inline-block px-4 py-1 border border-gold/30 rounded-full text-xs text-champagne uppercase tracking-wider bg-gold/5">
-                      {activity.stat}
-                    </span>
+                  <div className={`w-full md:w-1/2 pl-16 md:pl-0 ${isEven ? 'md:pr-12 md:text-right' : 'md:hidden'} order-2 md:order-1`}>
+                    {isEven && (
+                      <div className="luxury-card p-6 md:p-8 hover:scale-[1.02] transition-transform duration-300">
+                        <span className="text-xs uppercase tracking-widest text-gold font-semibold block mb-2">{activity.stat}</span>
+                        <h4 className="font-serif text-2xl text-ivory font-bold mb-3">{activity.title}</h4>
+                        <p className="text-muted font-light text-sm md:text-base leading-relaxed">{activity.description}</p>
+                      </div>
+                    )}
                   </div>
 
-                  {/* Center Node */}
-                  <div className="absolute left-[28px] md:left-1/2 -translate-x-1/2 flex items-center justify-center w-14 h-14 rounded-full bg-navy border-2 border-gold/60 text-gold shadow-[0_0_20px_rgba(212,175,98,0.4)] z-10 shrink-0 group-hover:scale-110 group-hover:bg-gold/10 transition-all duration-300">
-                    <div className="absolute inset-0 rounded-full bg-gold/20 animate-ping opacity-20"></div>
-                    <span className="opacity-0 hidden">{activity.id}</span>
-                    <div className="w-6 h-6">
-                      {iconMap[activity.icon]}
+                  {/* Center Node / Icon */}
+                  <div className="absolute left-0 md:left-1/2 -translate-x-0 md:-translate-x-1/2 w-14 h-14 rounded-full bg-navy border border-gold/40 flex items-center justify-center text-gold shadow-[0_0_20px_rgba(212,175,98,0.2)] z-10 order-1 md:order-2">
+                    {iconMap[activity.icon] || <Globe />}
+                  </div>
+
+                  {/* Right Side (Content for odd, Empty for even on Desktop) */}
+                  <div className={`w-full md:w-1/2 pl-16 md:pl-12 ${!isEven ? 'md:text-left' : 'md:hidden'} order-2 md:order-3`}>
+                    <div className="luxury-card p-6 md:p-8 hover:scale-[1.02] transition-transform duration-300">
+                      <span className="text-xs uppercase tracking-widest text-gold font-semibold block mb-2">{activity.stat}</span>
+                      <h4 className="font-serif text-2xl text-ivory font-bold mb-3">{activity.title}</h4>
+                      <p className="text-muted font-light text-sm md:text-base leading-relaxed">{activity.description}</p>
                     </div>
-                  </div>
-
-                  {/* Right Side (Content for odd on Desktop, All on Mobile) */}
-                  <div className={`pl-20 md:pl-12 w-full md:w-1/2 ${!isEven ? 'md:opacity-100 md:text-left' : 'md:hidden'} text-left`}>
-                    <h4 className="font-serif text-2xl text-gold mb-2">{activity.title}</h4>
-                    <p className="text-muted font-light mb-4">{activity.description}</p>
-                    <span className="inline-block px-4 py-1 border border-gold/30 rounded-full text-xs text-champagne uppercase tracking-wider bg-gold/5">
-                      {activity.stat}
-                    </span>
                   </div>
 
                 </motion.div>
               );
             })}
           </div>
+
         </div>
-        
+
       </div>
     </section>
   );

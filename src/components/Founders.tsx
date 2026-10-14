@@ -1,7 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useSiteData } from '../context/SiteDataContext';
 
-const founders = [
+const defaultFounders = [
   {
     id: 1,
     name: "M. Mohammed Akil",
@@ -23,6 +24,9 @@ const founders = [
 ];
 
 const Founders: React.FC = () => {
+  const { founders: siteFounders, getImageUrl } = useSiteData();
+  const founders = (siteFounders && siteFounders.length > 0) ? siteFounders : defaultFounders;
+
   return (
     <section className="py-24 relative overflow-hidden bg-midnight">
       {/* Ambient background glow */}
@@ -81,7 +85,7 @@ const Founders: React.FC = () => {
                   <div className="absolute inset-0 bg-gold/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 pointer-events-none"></div>
                   
                   <img 
-                    src={founder.image} 
+                    src={getImageUrl(founder.image)} 
                     alt={founder.name}
                     className="w-full h-full object-cover object-top transform group-hover:scale-110 transition-transform duration-700 ease-in-out"
                   />

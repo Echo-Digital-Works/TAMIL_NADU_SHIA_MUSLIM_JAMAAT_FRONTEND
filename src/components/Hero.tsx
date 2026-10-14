@@ -3,20 +3,30 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import IslamicPattern from './IslamicPattern';
 import ShootingStars from './ShootingStars';
+import { useSiteData } from '../context/SiteDataContext';
 
-const backgroundImages = [
+const defaultBackgroundImages = [
   '/hero/hero-1.png',
   '/hero/hero-2.png'
 ];
 
-const mobileBackgroundImages = [
+const defaultMobileBackgroundImages = [
   '/hero/hero-1-mobile.png',
   '/hero/hero-2-mobile.png'
 ];
 
 const Hero: React.FC = () => {
+  const { content, images, getImageUrl } = useSiteData();
   const [currentBg, setCurrentBg] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+
+  const desktopBgs = (images.heroDesktop && images.heroDesktop.length > 0)
+    ? images.heroDesktop.map(getImageUrl)
+    : defaultBackgroundImages;
+
+  const mobileBgs = (images.heroMobile && images.heroMobile.length > 0)
+    ? images.heroMobile.map(getImageUrl)
+    : defaultMobileBackgroundImages;
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -26,11 +36,13 @@ const Hero: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    const total = isMobile ? mobileBgs.length : desktopBgs.length;
+    if (total === 0) return;
     const timer = setInterval(() => {
-      setCurrentBg((prev) => (prev + 1) % backgroundImages.length);
+      setCurrentBg((prev) => (prev + 1) % total);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [isMobile, mobileBgs.length, desktopBgs.length]);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 md:pt-20 bg-midnight">
@@ -39,7 +51,7 @@ const Hero: React.FC = () => {
         <AnimatePresence>
           <motion.img
             key={currentBg + (isMobile ? '-mobile' : '-desktop')}
-            src={isMobile ? mobileBackgroundImages[currentBg] : backgroundImages[currentBg]}
+            src={isMobile ? mobileBgs[currentBg % mobileBgs.length] : desktopBgs[currentBg % desktopBgs.length]}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -62,7 +74,7 @@ const Hero: React.FC = () => {
           className="max-w-4xl mx-auto"
         >
           <h1 className="font-serif text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-ivory to-gold mb-6 text-glow leading-tight pb-2 px-2 sm:px-0">
-            Tamil Nadu Shia Muslim Jamaat
+            {content.hero?.title || 'Tamil Nadu Shia Muslim Jamaat'}
           </h1>
           
           <motion.div 
@@ -73,7 +85,7 @@ const Hero: React.FC = () => {
           >
             <div className="h-px bg-gold/30 w-16 md:w-32"></div>
             <h2 className="text-xl md:text-3xl font-serif text-champagne uppercase tracking-[0.2em]">
-              1st Year Completion Report
+              {content.hero?.subtitle || '1st Year Completion Report'}
             </h2>
             <div className="h-px bg-gold/30 w-16 md:w-32"></div>
           </motion.div>
@@ -84,7 +96,7 @@ const Hero: React.FC = () => {
             transition={{ duration: 1, delay: 0.8 }}
             className="text-lg md:text-xl text-muted font-light tracking-wide mb-12 italic"
           >
-            "Serving with Faith • Unity • Justice • Humanity"
+            "{content.hero?.tagline || 'Serving with Faith • Unity • Justice • Humanity'}"
           </motion.p>
           
           <motion.div 

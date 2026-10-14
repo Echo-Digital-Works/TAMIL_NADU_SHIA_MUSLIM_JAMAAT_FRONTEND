@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { useSiteData } from '../context/SiteDataContext';
 
 const navLinks = [
   { name: 'About', href: '#about' },
@@ -12,6 +13,7 @@ const navLinks = [
 ];
 
 const Navbar: React.FC = () => {
+  const { branding, getImageUrl } = useSiteData();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -30,16 +32,22 @@ const Navbar: React.FC = () => {
     )}>
       <div className="container mx-auto px-6 lg:px-12 flex justify-between items-center">
         <a href="#" className="flex items-center gap-3 md:gap-4">
-          <div className="bg-white p-1 rounded-lg border-2 border-gold/50 shadow-[0_0_15px_rgba(212,175,98,0.3)]">
+          <div className="bg-white p-1 rounded-lg border-2 border-gold/50 shadow-[0_0_15px_rgba(212,175,98,0.3)] flex items-center justify-center overflow-hidden">
             <img 
-              src="/logo.jpeg" 
+              src={getImageUrl(branding?.logoUrl || '/logo.jpeg')} 
               alt="Jamaat Logo" 
               className="w-10 h-10 md:w-12 md:h-12 object-contain"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                if (!target.src.endsWith('/logo.jpeg')) {
+                  target.src = '/logo.jpeg';
+                }
+              }}
             />
           </div>
           <span className="font-serif text-lg md:text-xl lg:text-2xl font-bold text-gold tracking-wide">
-            <span className="hidden sm:inline">Tamil Nadu Shia Muslim Jamaat</span>
-            <span className="sm:hidden">TNSMJ</span>
+            <span className="hidden sm:inline">{branding?.name || 'Tamil Nadu Shia Muslim Jamaat'}</span>
+            <span className="sm:hidden">{branding?.shortName || 'TNSMJ'}</span>
           </span>
         </a>
 
@@ -59,33 +67,39 @@ const Navbar: React.FC = () => {
           </a>
         </div>
 
-        {/* Mobile Menu Toggle */}
-        <button 
-          className="md:hidden text-gold p-2"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        {/* Mobile Hamburger Button */}
+        <div className="md:hidden flex items-center">
+          <button 
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="text-gold focus:outline-none p-2"
+          >
+            {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+        </div>
       </div>
 
-      {/* Mobile Nav */}
-      <div className={cn(
-        "md:hidden absolute top-full left-0 right-0 glass border-t border-ivory/10 transition-all duration-300 overflow-hidden",
-        isMobileMenuOpen ? "max-h-[400px] py-4" : "max-h-0 py-0"
-      )}>
-        <div className="flex flex-col items-center space-y-6">
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden glass border-t border-gold/20 px-6 py-6 space-y-4">
           {navLinks.map((link) => (
-            <a 
-              key={link.name} 
+            <a
+              key={link.name}
               href={link.href}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="text-lg font-medium text-ivory hover:text-gold transition-colors uppercase tracking-widest"
+              className="block text-base font-medium text-ivory hover:text-gold tracking-wider uppercase py-2 border-b border-gold/10"
             >
               {link.name}
             </a>
           ))}
+          <a 
+            href="#contact"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="block w-full text-center py-3 mt-4 bg-gold text-midnight font-bold rounded-full uppercase tracking-wider text-sm"
+          >
+            Support Us
+          </a>
         </div>
-      </div>
+      )}
     </nav>
   );
 };
